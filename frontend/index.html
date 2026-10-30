@@ -1,1 +1,99 @@
-placeholder
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JARS ASSET SPOOFER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">J</div>
+      <div>
+        <div class="brand-name">JARS</div>
+        <div class="brand-sub">ASSET SPOOFER</div>
+      </div>
+    </div>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-type="animation">Animation</button>
+      <button class="tab" data-type="model">Model</button>
+      <button class="tab" data-type="audio">Audio</button>
+    </nav>
+
+    <div class="api-box">
+      <button class="btn btn-ghost" id="testBtn">Test Koneksi API</button>
+      <div class="api-status" id="apiStatus">Belum dites</div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <section class="card">
+      <h1 id="title">Animation</h1>
+      <p class="muted" id="hint"></p>
+
+      <div class="dropzone" id="dropzone">
+        <div class="dz-icon">&#8679;</div>
+        <div class="dz-text"><strong>Tap untuk pilih file</strong></div>
+        <div class="muted small" id="dzSub">atau seret file ke sini</div>
+        <input type="file" id="fileInput" multiple hidden>
+      </div>
+
+      <div class="row between">
+        <div class="muted small" id="counter">0 file</div>
+        <button class="link" id="clearBtn">Kosongkan</button>
+      </div>
+
+      <ul class="files" id="fileList"></ul>
+
+      <div class="progress-wrap">
+        <div class="row between small">
+          <span id="overallText">Siap</span>
+          <span id="overallPct">0%</span>
+        </div>
+        <div class="bar"><div class="bar-fill" id="overallBar"></div></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="uploadBtn">AUTO UPLOAD</button>
+        <button class="btn btn-ghost" id="retryBtn">Retry Gagal</button>
+        <button class="btn btn-danger" id="cancelBtn">Cancel</button>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-ghost" id="copyAllBtn">Copy Semua ID</button>
+        <button class="btn btn-ghost" id="txtBtn">Export TXT</button>
+        <button class="btn btn-ghost" id="csvBtn">Export CSV</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row between">
+        <h2>Riwayat Upload</h2>
+        <button class="link" id="clearHistoryBtn">Hapus riwayat</button>
+      </div>
+      <div class="filters">
+        <input type="search" id="historySearch" placeholder="Cari nama atau ID...">
+        <select id="historyFilter">
+          <option value="all">Semua</option>
+          <option value="animation">Animation</option>
+          <option value="model">Model</option>
+          <option value="audio">Audio</option>
+        </select>
+      </div>
+      <ul class="history" id="historyList"></ul>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
