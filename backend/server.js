@@ -1,8 +1,9 @@
 const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
+const path = require('path');
 
-// ====== KONFIGURASI (dari Environment Variables Render) ======
+// ====== KONFIGURASI (dari Environment Variables) ======
 const API_KEY = process.env.ROBLOX_API_KEY;
 const CREATOR_ID = process.env.CREATOR_ID;
 const CREATOR_TYPE = (process.env.CREATOR_TYPE || 'user').toLowerCase(); // user / group
@@ -29,6 +30,11 @@ const MIME = {
 
 const app = express();
 app.use(cors({ origin: ALLOWED_ORIGIN }));
+app.use(express.json());
+
+// ====== SAJI-KAN FRONTEND ======
+// Mengarahkan Express agar membaca folder frontend yang sejajar dengan backend
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -43,7 +49,6 @@ function getExt(name) {
   return i < 0 ? '' : name.slice(i + 1).toLowerCase();
 }
 
-// Cek isi file benar-benar sesuai formatnya
 function validateContent(buf, ext) {
   const head = buf.slice(0, 256);
   const ascii = head.toString('latin1');
@@ -83,7 +88,6 @@ function httpErrorMessage(status, detail) {
   return 'Roblox error (' + status + '): ' + detail;
 }
 
-// Kirim request ke Roblox, ulang otomatis bila kena rate limit
 async function robloxFetch(url, options, attempts = 3) {
   for (let i = 0; i < attempts; i++) {
     const res = await fetch(url, options);
@@ -147,15 +151,12 @@ async function pollOperation(opPath) {
 }
 
 // ====== ROUTES ======
-app.get('/', (req, res) => res.send('JARS backend aktif'));
-
 app.get('/api/test', async (req, res) => {
-  if (!API_KEY) return res.json({ ok: false, message: 'ROBLOX_API_KEY belum diisi di Render' });
-  if (!CREATOR_ID) return res.json({ ok: false, message: 'CREATOR_ID belum diisi di Render' });
+  if (!API_KEY) return res.json({ ok: false, message: 'ROBLOK_API_KEY belum diisi di Vercel' });
+  if (!CREATOR_ID) return res.json({ ok: false, message: 'CREATOR_ID belum diisi di Vercel' });
   if (!/^\d+$/.test(CREATOR_ID)) return res.json({ ok: false, message: 'CREATOR_ID harus angka saja' });
 
   try {
-    // ID palsu: kalau key valid, Roblox menjawab 404/400. Kalau key salah, 401.
     const r = await fetch(BASE + '/operations/00000000-0000-0000-0000-000000000000', {
       headers: { 'x-api-key': API_KEY }
     });
@@ -212,6 +213,11 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
     console.error('Upload error:', e.message);
     return res.status(e.status && e.status < 600 ? e.status : 500).json({ ok: false, error: e.message });
   }
+});
+
+// Fallback agar semua route selain /api membuka index.html frontend
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 // Error dari multer (file kebesaran, dll)
