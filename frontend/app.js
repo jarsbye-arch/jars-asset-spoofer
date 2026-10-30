@@ -1,6 +1,6 @@
 // ====== KONFIGURASI ======
 // Diisi di Tahap 6 dengan URL backend Render kamu
-const API_URL = 'GANTI_DENGAN_URL_RENDER';
+const API_URL = '';
 
 const TYPES = {
   animation: {
