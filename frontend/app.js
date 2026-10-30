@@ -1,6 +1,6 @@
 // ====== KONFIGURASI ======
 // Diisi di Tahap 6 dengan URL backend Render kamu
-const API_URL = '';
+const API_URL = window.location.origin;
 
 const TYPES = {
   animation: {
